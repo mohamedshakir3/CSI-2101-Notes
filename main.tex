@@ -376,7 +376,7 @@ Therefore $gcd(465,144) = 3$.
     \end{align*}
     So we read the trace of Euclid's algorithm backward while keeping $gcd(a,b)$ on the same side of the equality.
 \end{proof}
-\textbf{Check notes from examples. I am too tired to do them now.}
+\textbf{TBC.}
 \begin{lemma}\label{lemma6.0.2}
     Let $a,b,c \in \ints$ with $a \neq 0$. If $gcd(a,b) = 1$ and $a \mid (bc)$, then $a \mid c$.
 \end{lemma}
@@ -686,11 +686,122 @@ $1 \cdot a, 2\cdot a, 3 \cdot a, \dots, (p-1)\cdot a$ are all different $(mod \ 
 
 
 \end{proof}
-
+%----------------- Lecture 11 -----------------
 \chapter{Intro to Cryptography}
 
+%----------------- Lecture 12 -----------------
+\chapter{Asympotic Notation}
+
+\section{Big-O Notation}
+The \emph{O-notation} describes an asympotic upper bound.
+\begin{definition}
+    Let 
+    \[f: \nat \rightarrow \real^+\]
+    \[g: \nat \rightarrow \real^+\]
+    be two functions. We say that $f$ is \emph{O(g)} if there exists a real number $c > 0$ and $k \in \nat$ such that for all $n \geq k$, 
+    \[f(n) \leq c \cdot g(n)\]
+\end{definition} 
+\noindent
+\textbf{Notation:}
+\[f(n) \leq c \cdot g(n)\]
+\[f = O(g)\]
+\[\exists c\exists k \forall n (n \geq k \implies f(n) \leq c \cdot g(n))\]
+\textbf{Domain:} $k, n \in \nat$, $c \in \real^+ \setminus \{0\}$\\[3ex]
+\noindent
+\textbf{Example:} $13x^3 + 12x^2 + 5 = O(x^3)$. We have
+\[13x^3 + 12x^2 + 5 \leq 13x^3 + 12x^3 + 5x^2 = 30x^3\]
+Take $c = 30$ and $k = 1$. So 
+\[13x^3 + 12x^2 + 5 \leq 30 \cdot x^3 \]
+for all $x \geq 1$. Therefore $13x^3 + 12x^2 + 5 = O(x^3)$. \\[3ex]
+\textbf{Example:} $x^2 = O\left(\frac{1}{2}x^2 - 10x\right)$. We have 
+\[x^2 \leq 2 \left(\frac{1}{2}x^2 - 10x\right)\]
+Now we want 
+\[x^2 \geq 40x\]
+so that that $x^2 - 40x$ is positive. So
+\[x > 40\]
+Then, 
+\begin{align*}
+    x^2 &= 2x^2 - x^2\\
+    &\leq 2x^2 - 40x\\
+    &= 4\left(\frac{1}{2}x^2 - 10x\right)
+\end{align*}
+So take $c = 4$ and $k = 40$. Then $x^2 = O\left(\frac{1}{2}x^2 - 10x\right)$ for all $x \geq 40$.
 
 
+\begin{prop}
+    Let $a > 0$ and $b > 0$. be two rael numbers. We have 
+    \[log^a(x) = O(x^b)\]
+\end{prop}
+\begin{proof}
+    Let $a > 0$ and $b > 0$ be two real numbers. We'll use that fact that $\forall x \geq 0$, we have $x \leq e^x$. From which, we have $log(x) \leq x$. Let $x$ be an integer. We have, by the previous property, 
+    \begin{align*}
+        \log(x^{\frac{b}{a}}) &\leq x^{\frac{b}{a}}\\
+        \frac{b}{a}\log(x) &\leq x^{\frac{b}{a}}\\
+        \left(\frac{b}{a}\right)^a \log^a(x) &\leq x^b\\
+        \log^a(x) &\leq \left(\frac{a}{b}\right)^ax^b
+    \end{align*}
+    So we take $c = \left(\frac{a}{b}\right)^a$ and $k = 1$.
+\end{proof}
+
+\section{Big-Omega Notation}
+The \emph{$\Omega$-notation} describes an asympotic lower bound.
+\begin{definition}
+    Let 
+    \[f: \nat \rightarrow \real^+\]
+    \[g: \nat \rightarrow \real^+\]
+    be two functions. We say that $f$ is $\Omega(g)$ if there exists a real number $c > 0$ and $k \in \nat$ such that for all $n \geq k$,
+    \[f(n) \geq c\cdot g(n)\]
+\end{definition}
+\noindent
+\textbf{Notation:} 
+\[f(n) = \Omega(g(n))\]
+\[f = \Omega(g)\]
+\[\exists c\exists k \forall n (n \geq k \implies f(n) \geq c \cdot g(n))\]
+\textbf{Domain:} $k, n \in \nat$, $c \in \real^+ \setminus \{0\}$\\[3ex]
+\textbf{Example:} $13x^3 + 12x^2 + 5 = \Omega(x^3)$.
+\[13x^3 + 12x^2 + 5 \geq 13x^3\]
+Take $c = 13$ and $k = 0$. So $13x^3 + 12x^2 + 5 = \Omega(x^3)$.\\[3ex]
+\textbf{Example:} $x^2 = \Omega\left(\frac{1}{2}x^2 - 10x\right)$. 
+\begin{align*}
+    x^2 &\geq \frac{1}{2}x^2\\
+    &\geq \frac{1}{2}x^2 - 10x\\
+    &= 1 \cdot \left(\frac{1}{2}x^2 - 10x\right)
+\end{align*}
+Take $c = 1$ and $k = 0$. So $x^2 = \Omega\left(\frac{1}{2}x^2 - 10x\right)$ $\forall x \geq k$.
+\begin{prop}
+    Let $f(n)$ and $g(n)$ be two functions. 
+    \[f(n) = O(g(n)) \iff g(n) - \Omega(f(n))\]
+\end{prop}
+\begin{proof}
+    ($\implies$) Let $f(n)$ and $g(n)$ be two functions. Assume $f(n) = O(g(n))$. Then there exists $c > 0$ and $k \in \nat$ such that for all $n \geq k$, we have $f(n) \leq c \cdot g(n)$. So,
+    \[f(n) \leq c \cdot g(n)\]
+    given that $n \geq g(n)$, then 
+    \[g(n) \geq \frac{1}{c} f(n)\]
+    ($\impliedby$) The proof follows the same.
+\end{proof}
+
+\section{Big-Theta Notation}
+The \emph{$\Theta$-notation} describes an asympotic upper and lower bound.
+\begin{definition}
+    Let 
+    \[f: \nat \rightarrow \real^+\]
+    \[g: \nat \rightarrow \real^+\]
+    be two functions. We say that $f$ is $\Theta(g)$ if there exists a real number $c_1 > 0$, $c_2 > 0$ and $k \in \nat$ such that for all $n \geq k$. In otherwords,
+    \[f(n) = O(g(n)) \text{ and } f(n) = \Omega(g(n))\]
+\end{definition}
+\textbf{Notation:} 
+\[f(n) = \Theta(g(n))\]
+\[f = \Theta(g)\]
+\begin{prop}
+    Let $f(n)$ and $g(n)$ be two functions. $f(n) = \Theta(g(n))$ if and only if $f(n) = O(g(n))$ and $g(n) = \Omega(f(n))$.
+\end{prop}
+\begin{proof}
+    \[f(n) = \Theta(g(n)) \iff f(n) = O(g(n)) \text{ and } f(n) = \Omega(g(n))\]
+    By the definition of theta, so
+    \[g(n) = \Omega(f(n)) \text{ and } g(n) = O(f(n))\]
+    From the previous proposition, then 
+    \[g(n) = \Theta(f(n))\]
+\end{proof}
 \end{document}
 
  
