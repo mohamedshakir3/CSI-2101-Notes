@@ -657,33 +657,17 @@ So we have $\ints_{3 \cdot 5 \cdot 7} = \ints_{105}$, $68 \in \ints_{105}$ and $
         
     \end{enumerate}
 \end{theorem}
+\noindent
 \textbf{Example:} 
-$$1534^{2016} \ (mod \ 2017)$$
-2017 is prime and $1534 < 2017$, so $gcd(1534, 2017) = 1$ and $1534^2016 \equiv 1 \ (\mod \ 2017)$
-\begin{proof}For (2)
-$1 \cdot a, 2\cdot a, 3 \cdot a, \dots, (p-1)\cdot a$ are all different $(mod \ p)$. 
-\raggedcolumns
-\begin{multicols}{2}
-\begin{itemize}
-    \item $a = 12$ and $p = 7$
-    \item $1 \cdot a \equiv 5 \ (mod \ 7)$
-    \item $2 \cdot a \equiv 3 \ (mod \ 7)$
-    \item $3 \cdot a \equiv 1 \ (mod \ 7)$
-    \item $4 \cdot a \equiv 6 \ (mod \ 7)$
-    \item $5 \cdot a \equiv 4 \ (mod \ 7)$
-    \item $6 \cdot a \equiv 2 \ (mod \ 7)$
-\end{itemize}
-\columnbreak
-\begin{itemize}
-    \item $a = 9$ and $p = 5$
-    \item $1 \cdot a \equiv 4 \ (mod \ 5)$
-    \item $2 \cdot a \equiv 4 \ (mod \ 5)$
-    \item $3 \cdot a \equiv 4 \ (mod \ 5)$
-    \item $4 \cdot a \equiv 4 \ (mod \ 5)$
-\end{itemize}
-\end{multicols}
-
-
+$$1534^{2016} \pmod{2017}$$
+2017 is prime and $1534 < 2017$, so $gcd(1534, 2017) = 1$ and $1534^{2016} \equiv 1 \ (\mod \ 2017)$
+\begin{proof}For (2), we need to usthe following property
+\[1 \cdot a, 2\cdot a, 3 \cdot a, \dots, (p-1)\cdot a\] 
+are all different$\pmod{p}$.Consider $s, e \in \{1, 2, \ldots, p-1\}$ such that 
+\[ra \equiv sa \pmod{p}\]
+Since $\gcd(a,p) = 1$, we can divide both sides by $a$ to get 
+\[r \equiv s \pmod{p}\]
+Then since $r, s < p$, then $r = s$`'
 
 \end{proof}
 
