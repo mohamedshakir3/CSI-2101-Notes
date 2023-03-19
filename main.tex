@@ -790,6 +790,245 @@ The \emph{$\Theta$-notation} describes an asympotic upper and lower bound.
     From the previous proposition, then 
     \[g(n) = \Theta(f(n))\]
 \end{proof}
+
+%---------------- Lecture 14 ----------------%
+\chapter{Recursivity}
+\begin{lemma}
+    Let $F_n = F_{n-1} + F_{n-2}$ denote the $n$th term of the Fibonacci sequence with $F_0 = 0$ and $F_1 = 1$. And let $\alpha = \frac{\sqrt{5}+1}{2}$ (golden ratio). Then $\forall n \geq 3$, 
+    \[F_n > \alpha^{n-2}\]
+\end{lemma}
+\begin{proof}
+    By induction, 
+    \begin{center}
+        \textit{\textbf{Note:} $\alpha^2 = \left(\frac{\sqrt{5}+1}{2}\right)^2 = \frac{5 +2\sqrt{5} + 1}{4} = \frac{\sqrt{5} + 3}{2} = \frac{\sqrt{5}+1}{2} + 1 = \alpha + 1$}
+    \end{center}\label{eq:note}
+    \begin{itemize}
+        \item \textbf{Base case:} $n = 3$. Then $F_3 = F_2 + F_1 = 1 + 1 = 2$. We have 
+        \begin{align*}
+            3 &> \sqrt{5}\\
+            4 &> \sqrt{5} + 1\\
+            2 &> \frac{\sqrt{5} + 1}{2}\\
+            F_3 &> \frac{\sqrt{5} + 1}{2}^2 = \alpha^{3-2}
+        \end{align*}
+        For $n = 4$, $F_4 = F_3 + F_2 = 2 + 1 = 3$. We have
+        \begin{align*}
+            2 &> \alpha\\
+            2 + 1 &> \alpha + 1\tag{\hyperref[eq:note]{From \blue{Note}}}\\
+            3 &> \alpha^2\\
+            F_4 &> \alpha^2 = \alpha^{4-2}
+        \end{align*}
+        \item \textbf{Induction Hypothesis:} Let $k \geq 4$ be an integer. Assume $F_i > \alpha^{i-2}$ for all $3 \leq i \leq k$.
+        \item \textbf{Induction Step:}
+        \begin{align*}
+            F_{k+1} &= F_k + F_{k-1}\tag{By def.}\\
+            &> \alpha^{k-2} + \alpha^{(k-1)-2}\tag{By IH}\\
+            &= \alpha^{k-2} + \alpha^{k-3}\\
+            &= \alpha^{k-3}(\alpha^1 + 1)\\
+            &= \alpha^{k-3}(\alpha^2)\tag{\hyperref[eq:note]{From \blue{Note}}}\\
+            &= \alpha^{k-1}\\
+            &= \alpha^{(k+1)-2} 
+        \end{align*}
+    \end{itemize}
+\end{proof}
+
+\begin{theorem}[Lam\'e]
+    Let $a,b \in \ints$ such that $a \geq b > 0$. Euclid's algorithm takes $O(\log(b))$ steps. 
+\end{theorem}
+\begin{proof}
+    Let $a,b \in \ints$ such that $a \geq b > 0$. Euclid's algorithm performs the following devisions:
+    \begin{align*}
+        a &= q\cdot b + r & 0 \leq& r < b\\
+        r_0 &= q_1\cdot r_1 + r_2 & 0 \leq& r_2 < r_1\\
+        r_1 &= q_2\cdot r_2 + r_3 & 0 \leq& r_3 < r_2\\
+        &\vdots & \vdots\\
+        r_{n-2} &= q_{n-1}\cdot r_{n-1} + r_n & 0 \leq& r_n < r_{n-1}\\
+        r_{n-1} &= q_n\cdot r_n + r_{n+1} & 0 \leq& r_{n+1} < r_n\\
+    \end{align*}
+    We have 
+    \begin{itemize}
+        \item $r_n = \gcd(a,b)$
+        \item $q_i \geq 1$ $1 \leq i \leq n-1$
+        \item $q_n \geq 2$
+        \item $n$ is the number of divisons performed by Euclid's algorithm
+    \end{itemize}
+    Therefore, $r_n = \gcd(a,b) \geq 1 = F_2$
+    \begin{align*}
+        r_{n-1} &= q_n \cdot r_n \geq 2 \cdot 1 = 2 = F_3\\
+        r_{n-2} &= q_{n-1} \cdot r_{n-1} + r_n \geq 1 \cdot F_3 + F_2 = F_4\\
+        r_{n-3} &= q_{n-2} \cdot r_{n-2} + r_{n-1} \geq 1 \cdot F_4 + F_3 = F_5\\
+        &\vdots\\
+        r_2 &= q_3 \cdot r_3 + r_4 \geq 1 \cdot F_{n-1} + F_{n-2} = F_n\\
+        b = r_1 &= q_2 \cdot r_2 + r_3 \geq 1 \cdot F_n + F_{n-1} = F_{n+1}\\
+    \end{align*}
+    Sp $b \geq F_{n+1} > \alpha^{(n+1) - 2}$ by the previous lemma.
+    \begin{align*}
+        b &> \alpha^{n-1}\\
+        \log(b) &> \log(\alpha^{n-1})\\
+        \log(b) &> n-1\log(\alpha)\\
+        \log(b) &> (n-1)\log\left(\frac{\sqrt{5} + 1}{2}\right)\\
+        \log(b) &> (n-1)\frac{2}{5}\\
+        \frac{5\log(b)}{2} + 1 &> n\\
+    \end{align*}
+    Therefore the number of steps $n < 1 + \frac{5}{2}\log(b) < \log(b) + \frac{5}{2}\log(b) = \frac{7}{2}\log(b)$ $\forall b > 3$. So $n = O(\log(b))$.
+\end{proof}
+
+The Fibonnaci recurrence is an example of a linear homogenous recurrence of order $k$.
+\[a_n = c_1 \cdot a_n{n-1} + c_2 \cdot a_{n-2} + \ldots + c_k \cdot a_{n-k}\]
+In general, a solution of the form 
+\[a_n = r^n\]
+will work for some $r \in \real$
+\[r^n = c_1 \cdot r^{n-1} + c_2 \cdot r^{n-2} + \ldots + c_k\cdot r^{n-k}\]
+Divide by $r^{n-k}$,
+\[r^k = c_1\cdot r^{k-1} + c_2 \cdot r^{n-2} + \ldots + c_k\]
+\[r^k - c_1\cdot r^{k-1} + c_2 \cdot r^{n-2} + \ldots + c_k = 0\]
+This is known as the characteristic equation. The solutions to this equation are called the \emph{characteristic roots}.\\[2ex]
+\textbf{Example:} $a_n = 1 \cdot a_{n-1} + 2\cdot a_{n-2}$.
+Characteristic Equation: 
+\[r^2 - 1\cdot r - 2 = 0 \implies (r+1)(r-1) = 0\]
+So we have the roots $r_1 = -1$ and $r_2 = 1$. So, 
+\[(-1)^n = 1 \cdot (-1)^{n-1} + 2(-1)^{n-2}\]
+\[2^n = 1 \cdot 2^{n-1} + 2 \cdot 2^{n-2}\]
+Moreover, for all $\alpha, \beta \in \real$, we have 
+\[(\alpha(-1)^n + \beta\cdot 2^n) = 1\cdot \left(\alpha \cdot (-1)^{n-1} + \beta \cdot 2^{n-1}\right) + 2\cdot\left(\alpha(-1)^{n-2} + \beta \cdot 2^{n-2}\right)\]
+Any linear combintion works. \\[2ex]
+\textbf{Example:} $F_0 =0$, $F_1 = 1$, $F_n = F_{n-1} + F_{n-2}$.
+Charactereristic Equation:
+\[r^2 - r - 1 = 0\]
+\[r = \frac{1 \pm \sqrt{5}}{2}\]
+So, 
+\[F_n = \alpha \left(\frac{1 + \sqrt{5}}{2}\right)^n + \beta \left(\frac{1 - \sqrt{5}}{2}\right)^n\]
+is a solution for any $\alpha, \beta \in \real$. Now we can find $\alpha,\beta$ to match the base cases.
+\[F_0 = \alpha \left(\frac{1 + \sqrt{5}}{2}\right)^0 + \beta \left(\frac{1 - \sqrt{5}}{2}\right)^0 = 0 \implies \alpha + \beta = 0\]
+\[F_1 = \alpha \left(\frac{1 + \sqrt{5}}{2}\right)^1 + \beta \left(\frac{1 - \sqrt{5}}{2}\right)^1 = 1 \]
+So, $\beta = -\alpha$. Then,
+\[\alpha \left(\frac{1 + \sqrt{5}}{2}\right) - \alpha \left(\frac{1 - \sqrt{5}}{2}\right) = 0\]
+\[\alpha \left(\left(\frac{1 + \sqrt{5}}{2}\right) - \left(\frac{1 - \sqrt{5}}{2}\right)\right) = 1\]
+\[\alpha\sqrt{5} = 1\]
+\[\alpha = \frac{1}{\sqrt{5}}\]
+Sos $\beta = -\alpha = -\frac{1}{\sqrt{5}}$. Therefore,
+\[F_n = \frac{1}{\sqrt{5}}\left(\frac{1 + \sqrt{5}}{2}\right)^n - \frac{1}{\sqrt{5}}\left(\frac{1 - \sqrt{5}}{2}\right)^n\]
+
+%-------------------- Lecture 15 --------------------------
+\chapter{Recursivity Continued}
+Let us consider the special case where some characteristic roots are repeated. We only focus on the case of order $k=2$.
+\[a_n = c_1 \cdot a_{n-1} + c_2 \cdot a_{n-2}\]
+Charactereristic Equation: 
+\[1 \cdot r^2 - c_1 \cdot r - c_2 = 0\]
+Since the roots are repeated, we have 
+\[(r-t)^2 = 0 \rightarrow r^2 - 2rt + t^2 = 0\]
+For some $t \in \real$. So $c_1 = 2t$, $c_2 = -t^2 = \frac{-c_1^2}{4}$. And the repeated root is $t = \frac{c}{2}$.\\[2ex]
+For any $\alpha, \beta \in \real$, the general solution is 
+\[a_n = \alpha \left(\frac{c_1}{2}\right)^n + \left(\beta \cdot n \cdot \frac{c_1}{2} \right)^n\]
+Indeed we have
+\[\left(\alpha  \left(\frac{c_1}{2}\right)^n + \beta \cdot n \cdot \left( \frac{c_1}{2} \right)^n \right) = c_1 \cdot \left(\alpha  \left(\frac{c_1}{2}\right)^{n-1} + \left(\beta \cdot (n-1) \cdot \frac{c_1}{2} \right)^{n-1} \right) + c_2 \cdot \left(\alpha  \left(\frac{c_1}{2}\right)^{n-1} + \left(\beta \cdot (n-1) \cdot \frac{c_1}{2} \right)^{n-2} \right)\]
+
+\textbf{Example:} $a_0 = 1$, $a_1 = 6$, $a_n = 6a_{n-1} - 9a_{n-2}$ for $n \geq 2$. Charactereristic Equation
+\[r^2 - 6r + 9 = 0 \rightarrow (r-3)^2 = 0\]
+So 
+\[a_n = \alpha \cdot 3^n + \beta \cdot n \cdot 3^n\]
+For some $\alpha, \beta \in \real$. We have 
+\[a_n = \alpha \cdot 3^0 + \beta \cdot 0 \cdot 3^0 = 1\]
+\[a_n = \alpha \cdot 3^1 + \beta \cdot 1 \cdot 3^1 = 6\]
+\[\alpha = 1\]
+\[3 \alpha + 3\beta = 6\]
+So $\alpha = 1$, and $\beta = 1$, so 
+\[a_n = 1\cdot 3^n + 1 \cdot n \cdot 3^n = (n+1)\cdot 3^n\]
+\textbf{Example:} $a_0 = 1$, $a_1 = 1$, $a_n = 4a_{n-1} - 4 \cdot a_{n-2}$ for $n \geq 2$. Charactereristic Equation:
+\[r^2 - 4r + 4 = 0\]
+\[(r-2)^2 = 0\]
+So 
+\[a_n = \alpha \cdot 2^n \beta \cdot n \cdot 2^n \]
+for some $\alpha, \beta \in \real$. We have
+\[a_0 = \alpha \cdot 2^0 + \beta \cdot 0 \cdot 2^0 = 0\]
+\[a_1 = \alpha \cdot 2^1 + \beta \cdot 1 \cdot 2^1 = 1\]
+Then $\alpha = 0$, $2\alpha + 2\beta = 1$. So $alpha = 0$, $\beta = \frac{1}{2}$. So
+\[a_n = 0 c\dot 2^n + \frac{1}{2} \cdot n \cdot 2^n = n \cdot 2^{n-1}\]
+\textbf{Example:} Let $S$ be the set defined recursively by
+\begin{itemize}
+    \item $3 \in S$
+    \item If $x,y \in S$, then $x + y \in S$
+\end{itemize}
+So we can take $x = 3$, $y = 3$, then $3 + 3 \in S$ and so on.\\[2ex]
+\textbf{Conjecture:} Let $E = \{3,6,9, \ldots\}$ and $S = E$. 
+\begin{proof}
+    We will prove $S \subseteq E$ and $E \subseteq S$.
+\begin{enumerate}
+    \item [$S \subseteq E$] By induction,
+    \begin{itemize}
+        \item \textbf{Base Case:} $3 \in S$ and $3 \in E$
+        \item \textbf{Inductive Hypothesis:} Let $x,y \in S$. Assume $x \in E$, and $y \in E$. 
+        \item \textbf{Induction Step:} We have $x + y \in S$ by definition. We want to show $x + y \in E$. Since $x, y \in E$ (from the induction hypthesis), then $x = 3k$, $y = 3l$ For some $k,l \in \ints$ with $k,l \geq 1$. So $x + y = 3k + 3l = 3(k+l) \in E$.
+    \end{itemize}
+    \item [$E \subseteq S$] By induction,
+    \begin{itemize}
+        \item \textbf{Base Case:} $3 \in E$ and $3 \in S$
+        \item \textbf{Inductive Hypothesis:} Let $m \in E$. Assume that $m \in S$
+        \item \textbf{Induction Step:} We want to prove that $m + 3 \in S$. By definition, $3 \in S$. By the induction hypthesis, $m \in S$. From the definition of $S$, $m + 3 \in S$. 
+    \end{itemize}
+\end{enumerate}
+\end{proof}
+
+\textbf{Example:} Find a rexursvie definition for the set 
+\[E = \{0, \frac{1}{2}, \frac{2}{3}, \frac{3}{4}, \frac{4}{5}, \ldots\}\]
+How do we get $\frac{k + 1}{k+2}$ from $\frac{k}{k+1}$?\\[2ex]
+If $x = \frac{k}{k+1}$, then we have
+\[kx + x = k \implies x = k(1-x)\]
+\[\frac{x}{1-x} = k\]
+\[\frac{k+1}{k+2} = \frac{\frac{x}{1-x} + 1}{\frac{x}{1-x} + 2} =  \frac{\frac{x}{1-x} + \frac{1-x}{1-x}}{\frac{x}{1-x} + \frac{2-2x}{1-x}}\]
+\[ = \frac{\frac{1}{1-x}}{\frac{2-x}{1-x}}\]
+\[= \frac{1}{2-x}\]
+\textbf{Conjecture:}
+\begin{itemize}
+    \item $0 \in S$
+    \item If $x \in S$, then $x + \frac{1}{2-x} \in S$
+\end{itemize}
+\begin{proof}
+    We want to prove $E = S$, so we will prove $E \subseteq S$ and $S \subseteq E$.
+    \begin{enumerate}
+        \item [$E \subseteq S$] By induction,
+        \begin{itemize}
+            \item \textbf{Base Case:} $0 \in E$, and $0 \in S$. 
+            \item \textbf{Inductive Hypothesis:} Let $x \in E$. Assume $x \in S$.
+            \item \textbf{Induction Step:} Since $x \in E$, $x = \frac{k}{k+1}$, for an integer $k \geq 0$. We want to show 
+            \[\frac{k+1}{k+2} \in S\]
+            We know $x \in S$ by the induction hypothesis. By the definition of $S$, 
+            \[\frac{1}{2-x} \in S\]
+            So,
+            \[\frac{1}{2-x} = \frac{1}{2 - \frac{k}{k+1}} = \frac{k+1}{2(k +1) - k} = \frac{k+1}{k+2} \in S\]
+        \end{itemize}
+        \item [$S \subseteq E$] By induction,
+        \begin{itemize}
+            \item \textbf{Base Case:} $0 \in S$, and $0 \in E$.
+            \item \textbf{Inductive Hypothesis:} Let $x \in S$. That is, assume 
+            \[x = \frac{k}{k+1}\]
+            for some integer $k \geq 0$
+            \item \textbf{Induction Step:} We want to prove that 
+            \[\frac{1}{2-x} \in E\]
+            We have 
+            \begin{align*}
+                \frac{1}{2-x} &= \frac{1}{2 - \frac{k}{k+1}}\tag{By the IH.}\\
+                &= \frac{k+1}{2(k+1)-k}\\
+                &= \frac{k+1}{(k+1)+1} \in E
+            \end{align*}
+        \end{itemize}
+    \end{enumerate}
+\end{proof}
+
+\section{K-ary Trees}
+\begin{definition}
+    A complete $k$-ary tree with height $h$ and root $r$ is defined recursively by 
+    \begin{itemize}
+        \item An isolated node $r$ is a complete $k$-ary tree with height $0$ and root $r$
+        \item Let $h \geq 0$. Let $T_i$ be a complete $k$-ary tree with height $h$ and root $r_i$ with $1 \leq i \leq k$, and let $r$ be an isolated node. The graph obtained by adding the edges $\{r,r_i\}$ is a complete tree with heigh $h+1$ and root $r$.
+    \end{itemize}
+\end{definition}
+
+%---------------- Lecture 16 ----------------%
+
+\chapter{K-Ary Trees}
+\textbf{Example: Ternary Trees}
+
+
 \end{document}
 
  
