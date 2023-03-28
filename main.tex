@@ -12,7 +12,7 @@
 \newtheorem{lemma}{Lemma}[section]
 
 \title{CSI 2101 Lecture Notes}
-\author{Mohamed Shakir}
+\author{Last updated:}
 
 \begin{document}
 
@@ -1033,8 +1033,11 @@ If $x = \frac{k}{k+1}$, then we have
 
 %----------------- Lecture 18 ---------------%
 \chapter{Graphs}
-A \emph{graph} $G$ is made of a non-empty set $V$ of \emph{vertices} (nodes)
-together with a set $E$ of \emph{edges}. Each edge in $E$ is an unordered pair ${u, v} \subseteq V$ with $u \neq v$. We write $G = (V,E)$. Graphs without loops and parallel edges are said to be \emph{simple}. 
+\begin{definition}
+    A \emph{graph} $G$ is made of a non-empty set $V$ of \emph{vertices} (nodes)
+    together with a set $E$ of \emph{edges}. Each edge in $E$ is an unordered pair ${u, v} \subseteq V$ with $u \neq v$. We write $G = (V,E)$. Graphs without loops and parallel edges are said to be \emph{simple}. 
+\end{definition}
+
 \begin{center}
     \textbf{\red{Important Note:} All graphs this semester are simple.}
 \end{center}
@@ -1080,7 +1083,55 @@ We say that $u$ is \emph{adjacent} to $v$ ($u$ and $v$ are neighbors) if $\{u,v\
 \setcounter{chapter}{19}
 
 %-------------- Lecture 20 ---------------%
-\chapter{}
+\chapter{More on Graphs}
+\begin{definition}[Cycles]
+    A \emph{cycle} is a sequence of vertices $v_0, v_1,v_2, \ldots, v_{l-1}, v_0$ such that $v_0, v_1,v_2, \ldots, v_{l-1}$ is a path and $\{v_0,v_1\},\{v_1,v_2\}, \ldots,\{v_{l-2},v_{l-1}\}, \{v_{l-1}, v_0\}$ are disstict edges. The \emph{length} of this cycle is $l$
+\end{definition}
+\begin{center}
+    \textbf{Note:} Cycles of length 0,1,2 are now allowed by this definition.
+\end{center}
+\begin{definition}[Walks]
+    A \emph{walk} is a path where we allow vertices to be repeated. A \emph{closed walk} is a cycle where we allow vertices to be repeated.
+\end{definition}
+\begin{definition}[Subgraph]
+    Let $G = (V,E)$ be a graph. A \emph{subgraph} $H$ of $G$, denoted by $H \subseteq G$, is a graph $H = (V', E')$, where $V' \subseteq V$ and $E' \subseteq E$.
+\end{definition}
+\begin{definition}[Connectedness]
+    A \emph{connected component} of $G$ is a subgraph of $G$ consisting of 
+    \begin{itemize}
+        \item All vertices that are connected to a given vertex.
+        \item Together with all edges incident to them.
+    \end{itemize}
+\end{definition}
+\begin{definition}[Forests]
+    A \emph{forest} is a graph that has no cycle. A \emph{tree} is a connect forest. A \emph{leaf} in a forest is a vertex of degree 1.
+\end{definition}
+\begin{theorem}
+    Let $G = (V,E)$ be a graph. Let $n = |V|$ and $m = |E|$. If $G$ is a forest, then $n > m$ and $G$ has $n-m$ connected componenets (trees).
+\end{theorem}
+\begin{proof}
+    By induction on $m$.
+    \begin{itemize}
+        \item \textbf{Base Case:} $m = 0$. If a forest has no edges, then $n > 0 = m$. Moreover, each vertex is its own connected component, so there are exactly $n = n - 0 = n-m$ connected components.
+        \item \textbf{Induction Hypothesis:} Let $k \geq 0$ be an integer. Assume that for all graphs $G$ with $n$ vetices and $k$ edges, if $G$ is a forest, then $n >k$ and $G$ has $n-k$ connected componenets.
+        \item \textbf{Induction Step:} Let $G$ be a forest with $n$ vertices and $k+1$ edges. Remove an arbitrary edge $e = \{a,b\}$ from $G$ without modifying the vertices. Removing $e$ from $G$ does not create a cycle, so the resulting graph $G'$ is a forest with $n$ vertices and $k$ edges. By the induction hypothesis, $n>k$ and $G'$ has $n-k$ connected components. 
+    \end{itemize}
+    Observe that $a$ and $b$ cannot both belong to the same connected component of $G'$. Otherwise, the path from $a$ to $b$ would create a cycle in $G$ and so $G$ would not be a forest. So, $a$ and $b$ are in two different connected components of $G'$. So, 
+    \[n -k \geq 2 \implies n \geq 2 + k = 1 + (1 + k ) > k + 1\]
+    If we put $e$ back in $G$, this connects the two connected components for $a$ and $b$ together. So $G$ has 
+    \[(n-k)-1 = n - (k+1)\]
+    connected components, as required.
+\end{proof}
+\begin{corollary}
+    Let $G = (V,E)$ be a tree. Then
+    \[n = |V| = |E| + 1 = m + 1\]
+\end{corollary}
+\begin{proof}
+    A tree is a forest with 1 connected component. By the previous theorem, $n - m =1$, so $n = m + 1$.
+\end{proof}
+\begin{definition}[Spanning Tree]
+    A \emph{spanning tree} of a connected graph $G$ is a subgraph of $G$ that includes all vertcies of $G$ and that is a tree.
+\end{definition}
 
 %-------------- Lecture 21 ---------------%
 \chapter{Spanning Trees Bipartite Graphs}
