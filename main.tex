@@ -1028,6 +1028,93 @@ If $x = \frac{k}{k+1}$, then we have
 \chapter{K-Ary Trees}
 \textbf{Example: Ternary Trees}
 
+%----------------- Lecture 17 ---------------%
+\chapter{}
+
+%----------------- Lecture 18 ---------------%
+\chapter{Graphs}
+A \emph{graph} $G$ is made of a non-empty set $V$ of \emph{vertices} (nodes)
+together with a set $E$ of \emph{edges}. Each edge in $E$ is an unordered pair ${u, v} \subseteq V$ with $u \neq v$. We write $G = (V,E)$. Graphs without loops and parallel edges are said to be \emph{simple}. 
+\begin{center}
+    \textbf{\red{Important Note:} All graphs this semester are simple.}
+\end{center}
+We say that $u$ is \emph{adjacent} to $v$ ($u$ and $v$ are neighbors) if $\{u,v\}$ is an edge. An edge $e$ is said to be \emph{incident} to $u$ if one of the two endpoints of $e$ is $u$. The \emph{degree} of a vertex $u \in V$ is the number of edges incident $u$.
+\begin{theorem}[Handshaking Lemma]
+    Let $G = (V,E)$ be a graph. 
+    \[\sum_{u \in V} deg(u) = 2|E|\]
+\end{theorem} 
+\begin{proof}
+    Look at an abritrary edge ${u,v} \in E$. Each edge is counted twice.
+\end{proof}
+\begin{theorem}
+    Let $G = (V,E)$ be a graph. Then $G$ has an even number of vertices with an odd degree.
+\end{theorem}
+\begin{proof}
+    By contradiction. Let $V_{even}$ denote the set of vertices of $G$ with an even degree, and $V_{odd}$ denote the set of vertices of $G$ with an odd degree. So 
+    \[V_{even} \cap V_{odd} = \emptyset\]
+    \[V_{even} \cup V_{odd} = V\]
+    For a contradiction, assume $|V_{odd}|$ is odd. Then
+    \begin{align*}
+        2|E| &= \sum_{u \in V} \text{deg}(u)\tag{Handshaking Lemma}\\
+        &= \sum_{u \in V_{even}}\text{deg}(u) + \sum_{u \in V_{odd}}\text{deg}(u)\\
+        &= 2k + 2l+1\\
+        &= 2(k+l)+1
+    \end{align*}
+
+    But $2|E|$ is even, so this is a contradiction.
+    
+\end{proof}
+\noindent
+\textbf{Example:} Can you find a graph with 5 verices with degrees 1,2,3,3,3? Yes, since by the previous theorem, we have an even number of vertices with an odd degree. \\[3ex]
+\noindent
+\textbf{Example:} Can you find a graph with 5 vertices with degrees 1,2,2,3,3? No, since by the previous theorem, we have an odd number of vertices with odd degree. 
+\begin{definition}
+    A \emph{path} in a graph $G = (V,E)$ is a sequence of vertices $v_0, v_1, \ldots, v_n$ such that $\{v_i,v_{i+1}\} \in E$ for all $0 \leq i \leq n-1$. A path can also be described as a sequence of the $n -1$ edges. The vertices $v_0$ and $v_n$ are the \emph{endpoints} of the path and $n$ is its \emph{length}.
+\end{definition}
+\begin{definition}
+    If there is a path with endpoints $u,w \in V$, we say that $v$ and $w$ are \emph{connected}. If any two vertices of a graph are connected, then we say that the graph is \emph{connected}.
+\end{definition}
+
+
+%-------------- Skip Lecture 19 --------------%
+\setcounter{chapter}{19}
+
+%-------------- Lecture 20 ---------------%
+\chapter{}
+
+%-------------- Lecture 21 ---------------%
+\chapter{Spanning Trees Bipartite Graphs}
+\begin{theorem}
+    Every connected graph graph $G = (V,E)$ has a spanning tree.
+\end{theorem}
+\begin{proof}
+    Let $G = (V,E)$ be a connected graph. By induction on the $m = |E|$.
+    \begin{itemize}
+        \item \textbf{Base Case:} $m = 0$. For $G$ to be connected graph, it must contain a single vertext $v$. Then $v$ itself is a spanning tree. 
+        \item \textbf{Induction Hypothesis:} Let $k \geq 0$ be an integer. Assume that all connected graphs with $k$ edges have a spanning tree.
+        \item \textbf{Induction Step:} Let $G$ be a connected graph with $k+1$ edges. We consider two cases. 
+        \begin{itemize}
+            \item \textbf{Case 1:} $G$ is a tree, then it is its own spanning tree. 
+            \item \textbf{Case 2:} If $G$ is not a tree, since $G$ is connected, then $G$ has a cycle. Remove an edge $e = \{a,b\}$ from this cycle. We get a graph $G'$ that is connected. Indeed, if a path uses $e$, we can reroute it along the other edges of the cycle. So $G'$ is connected and it has $k$ edges. By the induction hypothesis, $G'$ has a spanning tree $T$. $T$ covers all vertice of $G'$, so it covers all vertices of $G$, so $T$ is a spanning tree of $G$.
+        \end{itemize}
+    \end{itemize}
+\end{proof}
+This gives us a way to build a spanning tree; If $G$ is a tree, then it is its own spanning tree. Otherwise, find a cycle, remove an edge from this cycle, and recursively find a spanning tree.
+
+\begin{corollary}
+    Every graph with $n$ vertices and $m$ edges has at least $n-m$ connected components.
+\end{corollary}
+\begin{proof}
+    Let $G$ be a graph with $n$ vertices and $m$ edges. By the previous theorem, every connected component of $G$ has a spanning tree. Let $F$ be the union of these spanning trees. Then $F$ is a forest with $n$ vertices, and $m' \leq m$. Moreover, the number of connected components in $F$ is the same as in $G$. So $G$ has $n - m' \geq n -m$ connected components.
+\end{proof}
+We say that two sets $S$ and $T$ \emph{partition} a set $E$ if 
+\begin{itemize}
+    \item $S \neq \emptyset$
+    \item $T \neq \emptyset$
+    \item $S \cup T = E$
+    \item $S \cap T = \empty$ 
+\end{itemize}
+We say that a graph $G = (V, E)$ is \emph{bipartite} if $V$ can be partitioned into two sets $A$ and $B$ such that each edge has one endpoint in $A$ and one endpoint in $B$.
 
 \end{document}
 
