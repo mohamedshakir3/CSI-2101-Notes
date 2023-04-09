@@ -1167,6 +1167,228 @@ We say that two sets $S$ and $T$ \emph{partition} a set $E$ if
 \end{itemize}
 We say that a graph $G = (V, E)$ is \emph{bipartite} if $V$ can be partitioned into two sets $A$ and $B$ such that each edge has one endpoint in $A$ and one endpoint in $B$.
 
+\chapter{Bipartite Graphs}
+\textbf{\red{Note:} Final Exam Topics}
+\begin{itemize}
+    \item All lectures and all exercises
+    \item 2 hour Exam
+    \item 6 long answer questions and \textbf{nothing} Examples
+    \item Study notes and exercises!
+\end{itemize}
+\begin{lemma}
+    let $G = (V,E)$ be a bipartite graph with partition $(A,B)$. Then 
+    \[\sum_{v \in A} \deg(v) = \sum_{v \in B} \deg(V)\]
+\end{lemma}
+
+\begin{proof}
+    In the proof of the handshaking lemma, we saw that each edge in 
+    \[\sum_{v \in V} \deg(v)\]
+    is counted twice. Since each edge has one endpoint in $A$ and one endpoint in $B$, the equality follows. 
+\end{proof}
+
+\begin{lemma}
+    Let $G = (V,E)$ be a graph. If $G$ has a closed walk of odd length, then $G$ has a cycle of odd length.
+\end{lemma}
+\begin{proof}
+    By induction on the length $l$ of the closed walk. 
+    \begin{itemize}
+        \item \textbf{Base Case:} $l = 1$. Closed walks of length 1 do not exist. So the base case holds trivially. 
+        \item \textbf{Induction Hypothesis:} Let $K \in \ints$ be an odd integer. Assume that if a graph has a closed walk of odd length at most $K$, then it has a cycle of odd length.
+        \item \textbf{Induction Step:} Let $G = (V,E)$ be a graph having a closed walk of length $k + 2$ (which is odd). Let 
+        \[v_0, v_1, v_2, \ldots v_{k+1}, v_0\]
+        be this closed walk. If all $v_i$'s are different then this is a cycle with odd length. Otherwise, two vertices must be repeated, say $v_i$ and $v_j$
+        \[v_0, v_1, v_2, \ldots, v_{i-1}, v_{i},\ldots v_{j-1},v_{j}, \ldots, v_k, v_{k+1}\] 
+        Consider the closed walks 
+        \[v_i, v_{i+1}, \ldots, v_{j-1}, v_j = v_i\]
+        \[v_j, v_{j+1}, \ldots, v_{k+1}, v_0, v_1, \ldots, v_{i-1}, v_i = v_j\]
+        Since the length of the walk is $k+2$, we have the length of the first walk is less than $k+2$ and the second walk as well. Since $k+2$ is odd, then either the first walk or the second walk has odd length. By the induction hypothesis, one of these walks is a cycle. Therefore $G$ has a cycle of odd length. 
+    \end{itemize}
+\end{proof}
+
+\begin{theorem}
+    A graph is bipartite if and only if it has no odd cycles.
+\end{theorem}
+\begin{proof}
+    ($\implies$) Assume $G$ is bipartite with partition $V = A \cup B$. If $G$ has no cycle, then it is bipartite. Otherwise, let 
+    \[v_0, v_1, v_2, \ldots, v_{l-1}, v_0\]
+    be a cycle of length $l \geq 3$. We will show that $l$ is even. Without loss of generality, assume $v_0 \in A$. Since $v_0 \in A$, we must have $v_1 \in B$, then $v_2 \in A$, and so on. So $v_{l-1} \in A$ if $l-1$ is even and $v_{l-1} \in B$ if $l - 1$ is odd. Since $\{v_{l-1}, v_0\}$ is an edge of the cycle, $v_{l-1}$ must be in $B$. So $l-1$ is odd, and $l$ is even.\\[2ex]
+    ($\impliedby$) Assume $G$ has no cycle of odd length. We want to prove that $G$ is bipartite. Consider two cases where $G$ is connected and where $G$ is not connected. 
+    \begin{itemize}
+        \item \textbf{Case 1: $G$ is connected.} We need to build $A$ and $B$. Let $v_0$ be an arbitrary vertext. Let 
+        \[A = \{w \in V : \text{ there is a path of even length between $v_0$ and w}\}\]
+        \[B = \{w \in V : \text { there is a path of odd length between $v_0$ and $w$}\}\]
+        We will show that $A$ and $B$ are disjoint and that $A \cup B = V$, so $A$ and $B$ partition $V$. Since $G$ is connected, every vertex is connected to $v_0$, so every vertex belongs to either $A$ or $B$. We want to show that $A$ and $B$ are disjoint. For a contradiction, suppose $u \in A \cap B$. Since $v \in A$, there is a path of even length 
+        \[v_0, v_1, \ldots, v_s = u\]
+        where $s$ is even. Since $v \in B$, there is a path of odd length between $v_0$ and $v$. The reverse path also has odd length. 
+        \[u = v_s, v_{s+1},v_{s+2} \ldots, v_{s+t} = v_0\]
+        where $t$ is odd. Now 
+        \[v_0, v_1, \ldots, v_s, v_{s+1}, \ldots, v_{s+t} = v_0\]
+        is a closed walk of length $s + t$ where $s + t$ is odd. By the previous lemma, there is a cycle of odd length. This is a contradiction. So $A \cap B = \emptyset$. So $A,B$ is a partition of $V$. It remains to show that all edges have one endpoint in $A$ and one endpoint in $B$. For a contradiction, suppose there is an edge $\{u,w\}$ with both endpoints in $A$. Then there is a path of even length from $u$ to $v_0$ and a path of even length from $v_0$ to $w$. If $u$ and $w$ are different, then this is a cycle of even length then take the edge $\{u,w\}$ we get an odd length. by the previous lemma, there is a cycle of odd length. Thus, a contradiction.
+        \item \textbf{Case 2: $G$ is not connected.} Then we can apply case (1) to each connected component $C$ of $G$. For each $C$, we get a partition $(A_c, B_c)$. It remains to take 
+        \[A = \bigcup_{C \in G} A_C \text{  and  } B = \bigcup_{C \in G} B_C\]
+        So $G$ is bipartite.
+    \end{itemize}
+\end{proof}
+
+\chapter{Matchings}
+\begin{definition}[Matching]
+    A \emph{matching} in a graph $G = (V,E)$ is a subset of $M \subseteq E$ where no pair of edges share a vertex.
+\end{definition}
+\textbf{Example:}
+\[
+\begin{tikzpicture}[node distance={15mm}, main/.style ={draw, circle}]
+    \node[main] (1) {$a$};
+    \node[main] (2) [right of=1] {$b$};
+    \node[main] (3) [below of=1] {$c$};
+    \node[main] (4) [below of=2] {$d$};
+    \draw (1) -- (2);
+    \draw (1) -- (3);
+    \draw (1) -- (4);
+    \draw (3)--(4);
+\end{tikzpicture}
+\]
+\[M = \{\{a,b\}, \{c,d\}\}\]
+$M = \emptyset$ is a matching. 
+\begin{definition}[Maximum Matching]
+    A \emph{maximum matching} if it contains the greatest number of edges possible. 
+\end{definition}
+\noindent
+\textbf{Example:}
+\[
+    \begin{tikzpicture}[node distance={15mm}, main/.style ={draw, circle}]
+        \node[main] (1) {1};
+        \node[main] (2) [right of=1] {2};
+        \node[main] (3) [below of=1] {3};
+        \node[main] (4) [below of=2] {4};
+        \node[main] (5) [right of=2] {5};
+        \node[main] (6) [below left of=1] {6};
+        \draw (1) -- (2);
+        \draw (1) -- (3);
+        \draw (3) -- (4);
+        \draw (2)--(4);
+        \draw (6)--(1);
+        \draw (6)--(3);
+        \draw (2) -- (5);
+    \end{tikzpicture}
+\]
+\[M = \{\{6,3\}, \{6,1\}\}\]
+This is not a maximum matching because we could add the edge $\{1,2\}$ to get a matching with 3 edges. So 
+\[M = \{\{6,3\}, \{6,1\},\{2,1\} \}\]
+This matching is maximum.
+\begin{definition}[Perfect Matchings]
+    A matching is \emph{perfect} if it matches \emph{all} vertices.
+\end{definition}
+\noindent
+\textbf{Example:}
+\[
+    \begin{tikzpicture}[node distance={15mm}, main/.style ={draw, circle}]
+        \node[main] (1) {1};
+        \node[main] (2) [right of=1] {2};
+        \node[main] (3) [below of=1] {3};
+        \node[main] (4) [below of=2] {4};
+        \node[main] (5) [right of=2] {5};
+        \node[main] (6) [below left of=1] {6};
+        \draw (1) -- (2);
+        \draw (1) -- (3);
+        \draw (3) -- (4);
+        \draw (2)--(4);
+        \draw (6)--(1);
+        \draw (6)--(3);
+        \draw (2) -- (5);
+    \end{tikzpicture}
+\]
+\[M = \{\{6,3\}, \{6,1\},\{2,1\} \}\]
+is a perfect matching. In general, if a graph has an odd number of vertices, it cannot have a perfect matching. 
+\begin{theorem}
+    Let $G = (V,E)$ be a graph whose set of edges is the union of two matchings. Then $G$ is bipartite. 
+\end{theorem}
+\begin{proof}
+    Let $M_1$ and $M_2$ be the two matchings such that $E = M_1 \cup M_2$. We have to prove that $G$ does not have a cycle of odd length. By the previous theorem, this implies that $G$ is bipartite. For a contradiction, let 
+    \[v_0, v_1, v_2, \ldots, v_{l-1}, v_0\]
+    be a cycle of odd length. The edge $\{v_0, v_1\}$ is in $M_1$ or $M_2$. Without loss of generality, assume that $\{v_0, v_1\} \in M_1$. Then $\{v_1,v_2\} \in M_2$ otherwise $M_1$ would not be a matching. Then $\{v_2,v_3\} \in M_1$ and so on. So we have 
+    \[\{v_i, v_{i+1}\} \in M_1 \text{ if $i$ is even}\]
+    \[\{v_i, v_{i+1}\} \in M_2 \text{ if $i$ is odd}\]
+    Then, $\{v_{l-2}, v_{l-1} \in M_2\}$ since $l -2$ is odd, and $\{v_{l-1}, v_0\} \in M_1$ since $l-1$ is even. But, the edge $\{v_0, v_1\}$ in $M_1$ shares an edge with $\{v_{l-1}, v_0\}$ in $M_1$. This is a contradiction since $M_1$ is a matching.
+\end{proof}
+\noindent
+\textbf{Example:}
+\[
+    \begin{tikzpicture}[node distance={15mm}, main/.style ={draw, circle}]
+        \node[main] (1) {$a$};
+        \node[main] (2) [above of=1] {$b$};
+        \node[main] (3) [right of=2] {$c$};
+        \node[main] (4) [below of=3] {$d$};
+        \node[main] (5) [right of=4] {$e$};
+        \node[main] (6) [above of=5] {$f$};
+        \draw (1) -- (2);
+        \draw (2) -- (3);
+        \draw (3) -- (4);
+        \draw (4)--(5);
+        \draw (5)--(6);
+    \end{tikzpicture}
+\]
+\[M_1 = \{\{a,b\}, \{c,d\}, \{e,f\}\}\]
+\[M_2 = \{\{b,c\}, \{d,e\}\}\]
+$M_1 \cup M_2$ is equal to the set of edges. So this graph is bipartite. 
+
+\chapter{More on Bipartite Graphs and Matchings}
+\begin{definition}[Neighbour Set]
+    Let $G = (V,E)$ be a graph. Let $S \subseteq V$. The \emph{neighbour set} of $S$, denoted $N(S)$ is the set of vertices having at least one neighbour in $S$. 
+    \[N(S) = \{v \in V | \{v, s\} \text{ is an edge for some $s \in S$}\}\]
+\end{definition}
+\noindent
+\textbf{Example:}
+\[
+\begin{tikzpicture}[node distance={15mm}, main/.style ={draw, circle}]
+    \node[main] (1) {1};
+    \node[main] (2) [below of=1]{3};
+    \node[main] (3) [left of=2]{2};
+    \node[main] (4) [right of=2]{4};
+    \node[main] (5) [below of=2]{7};
+    \node[main] (6) [left of=5]{6};
+    \node[main] (7) [right of=5]{8};
+    \node[main] (8) [below of=5]{9};
+    \node[main] (9) [left of=6] {5};
+    \draw (1)--(2);
+    \draw (2)--(3);
+    \draw (2)--(4);
+    \draw (2)--(5);
+    \draw (5)--(6);
+    \draw (5)--(7);
+    \draw (5)--(8);
+    \draw (6)--(9);
+    \draw (4)--(5);
+    \draw (4)--(7);
+    \draw (3)--(6);
+\end{tikzpicture}
+\] 
+\[N(\{3,4\}) = \{1,2,3,4,7,8\}\]
+\[N(\{1\}) = \{3\}\]
+\[N(\{2,3,4\}) = \{1,2,3,4,5,6,7,8,9\}\]
+\begin{theorem}[Hall's Theorem]
+    Let $G = (V,E)$ be a bipartite graph with partition $(A,B)$. There exists a matching that matches all vertices in $A$ if and only for every $S \subseteq A$. We have $|N(S)| \geq |S|$.
+\end{theorem}
+\begin{proof}
+    ($\implies$) Suppose all vertices in $A$ can be matched. Let $S \subseteq A$ be a subset. We need to show that $|N(S)| \geq |S|$. For every $s \in S$, let $v$ be its partner in the matching. All these $v$'s are different. So there are $|S|$ of them. They are all neighbours of vertices in $S$. So they are in $N(S)$. Therefore, $|N(S)| \geq |S|$.\\[2ex]
+    ($\impliedby$) Assume that for every subset $S \subseteq A$, we have $|N(S)| \geq |S|$. We want to prove that all vertices in $A$ can be matched. By indunction, 
+    \begin{itemize}
+        \item \textbf{Base Case: } $n = |A| = 1$. Then $|N(A)| \geq |A| = 1$. So the unique vertex in $A$ has a neighbour in $B$ and it can be matched.
+        \item \textbf{Induction Hypothesis:} Let $K \geq 1$ be an integer. Assume that for all bipartite graphs $G$ with partition $(A,B)$ where $|A| \leq K$, if $|N(S)| \geq |S|$ for all $S \subseteq A$, then all vertices in $A$ can be matched.
+        \item \textbf{Induction Step:} Let $G$ be a bipartite graph with partition $(A,B)$ where $|A| = k+1$. Consider two cases where for every $X \subset A$, we have $|N(X)| \geq |X| +1$, and there exists a subset $X \subset A$ such that 
+        \[|N(X) < |X| +1 \implies |N(X)| = |X|\]
+        \begin{itemize}
+            \item \textbf{Case 1:} Let $a \in A$ and match it with an arbitrary neighbour $b \in B$. Remove $a$ and $b$ from $G$. Now for every proper subset $X \subset A$, we have $|N(X)| \geq |X|$. By the induction hypothesis, all vertices in $A \setminus \{a\}$ can be matched. So all vertices in $A$ can be matched.
+            \item \textbf{Case 2:} Let $X \subset A$ be a proper subset such that $|N(X)| = |X|$. Observe that all subsets $X' \subseteq X$ are subsets of $A$, and $|N(X')| \geq |X'|$. So by the induction hypothesis, all vertices in $X$ can be matched. Remove all vertices in $X$ and $N(X)$ from $G$. Suppose we can show that for all subsets $Y \subseteq A \setminus X$, $Y$ has at least $|Y|$ neighbours in $B \setminus N(X)$, then we apply the induction hypothesis to match all vertices in $A \setminus X$. Combining the two matchings will give us a matching that matches all vertices in $A$. To prove our supposition, suppose for a contradiction that there exists a subset $Y \subseteq A \setminus X$ that has less than $|Y|$ neighbours in $B \setminus N(X)$. Then the vertices in $X \cup Y$ have less than $|N(X)| + |Y|$ neighbours in $G$. Then
+            \begin{align*}
+                |N(X \cup Y)| &< |N(X)| + |Y|\\
+                &= |X| + |Y|\\
+                &= |X \cup Y|\\
+                &\leq |N(X \cup Y)|
+            \end{align*}
+            Which is a contradiction. 
+        \end{itemize}
+    \end{itemize}
+\end{proof}
 \end{document}
 
  
