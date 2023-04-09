@@ -1044,7 +1044,7 @@ If $x = \frac{k}{k+1}$, then we have
 We say that $u$ is \emph{adjacent} to $v$ ($u$ and $v$ are neighbors) if $\{u,v\}$ is an edge. An edge $e$ is said to be \emph{incident} to $u$ if one of the two endpoints of $e$ is $u$. The \emph{degree} of a vertex $u \in V$ is the number of edges incident $u$.
 \begin{theorem}[Handshaking Lemma]
     Let $G = (V,E)$ be a graph. 
-    \[\sum_{u \in V} deg(u) = 2|E|\]
+    \[\sum_{u \in V} \deg(u) = 2|E|\]
 \end{theorem} 
 \begin{proof}
     Look at an abritrary edge ${u,v} \in E$. Each edge is counted twice.
@@ -1071,8 +1071,8 @@ We say that $u$ is \emph{adjacent} to $v$ ($u$ and $v$ are neighbors) if $\{u,v\
 \textbf{Example:} Can you find a graph with 5 verices with degrees 1,2,3,3,3? Yes, since by the previous theorem, we have an even number of vertices with an odd degree. \\[3ex]
 \noindent
 \textbf{Example:} Can you find a graph with 5 vertices with degrees 1,2,2,3,3? No, since by the previous theorem, we have an odd number of vertices with odd degree. 
-\begin{definition}
-    A \emph{path} in a graph $G = (V,E)$ is a sequence of vertices $v_0, v_1, \ldots, v_n$ such that $\{v_i,v_{i+1}\} \in E$ for all $0 \leq i \leq n-1$. A path can also be described as a sequence of the $n -1$ edges. The vertices $v_0$ and $v_n$ are the \emph{endpoints} of the path and $n$ is its \emph{length}.
+\begin{definition}[Length]
+    A \emph{path} in a graph $G = (V,E)$ is a sequence of vertices $v_0, v_1, \ldots, v_l$ such that $\{v_i,v_{i+1}\} \in E$ for all $0 \leq i \leq l-1$. A path can also be described as a sequence of the $l$ edges. The vertices $v_0$ and $v_l$ are the \emph{endpoints} of the path and $l$ is its \emph{length}.
 \end{definition}
 \begin{definition}
     If there is a path with endpoints $u,w \in V$, we say that $v$ and $w$ are \emph{connected}. If any two vertices of a graph are connected, then we say that the graph is \emph{connected}.
@@ -1085,7 +1085,7 @@ We say that $u$ is \emph{adjacent} to $v$ ($u$ and $v$ are neighbors) if $\{u,v\
 %-------------- Lecture 20 ---------------%
 \chapter{More on Graphs}
 \begin{definition}[Cycles]
-    A \emph{cycle} is a sequence of vertices $v_0, v_1,v_2, \ldots, v_{l-1}, v_0$ such that $v_0, v_1,v_2, \ldots, v_{l-1}$ is a path and $\{v_0,v_1\},\{v_1,v_2\}, \ldots,\{v_{l-2},v_{l-1}\}, \{v_{l-1}, v_0\}$ are disstict edges. The \emph{length} of this cycle is $l$
+    A \emph{cycle} is a sequence of vertices $v_0, v_1,v_2, \ldots, v_{l-1}, v_0$ such that $v_0, v_1,v_2, \ldots, v_{l-1}$ is a path and $\{v_0,v_1\},\{v_1,v_2\}, \ldots,\{v_{l-2},v_{l-1}\}, \{v_{l-1}, v_0\}$ are distinct edges. The \emph{length} of this cycle is $l$
 \end{definition}
 \begin{center}
     \textbf{Note:} Cycles of length 0,1,2 are now allowed by this definition.
