@@ -570,7 +570,145 @@ Find a function $f(n)$ such that
 This sum is telescopic, so we get 
 \[\sum_{i=1}^n \frac{1}{i(i+1)} = 1 - \frac{1}{n+1}\]
 Take $f(n) = 1 - \frac{1}{n+1}$.
-\chapter{}
+
+
+
+%--------------------------- List 8 -------------------------------------%
+\chapter{Recursive Algorithms}
+\section{Question 1}
+\begin{center}
+    \textbf{Skipping question 1 and 2}
+\end{center}
+\setcounter{section}{2}
+\section{Question 3}
+Define the following sets recursively. Show that your answer is correct. 
+\begin{enumerate}[label=(\alph*)]
+    \item The set of even positive integers.
+    \item The set of positive multiples of 5. 
+    \item The set of powers of 3. 
+    \item The set of perfect squares.
+\end{enumerate}
+\textbf{Answer:} 
+\begin{enumerate}[label=(\alph*)]
+    \item Let $S$ be the set defined recursively by
+    \begin{itemize}
+        \item $2 \in S$
+        \item If $x,y \in S$, then $x + y \in S$.
+    \end{itemize}
+    Let $E$ denote the set of even positive integers, so $E = \{2,4,6,8,\ldots\}$. We want to show $S = E$. We will show that $S \subseteq E$ and $E \subseteq S$. 
+    \begin{proof}
+        By induction, we'll show $S \subseteq E$. 
+        \begin{itemize}
+            \item \textbf{Base Case:} $2 \in S$, and $2 \in E$.
+            \item \textbf{Inductive Hypothesis:} Let $x,y \in S$. Assume $x \in E$ and $y \in E$. We have that $x = 2l$, and $y = 2k$ for some $x,y \in \mathbb{Z}$.
+            \item \textbf{Inductive Step:} We want to show that $x+y \in E$, we have 
+            \[x + y = 2l + 2k = 2(l + k)\]
+            So $x + y \in E$ 
+        \end{itemize}
+        Now we want to show $E \subseteq S$. 
+        \begin{itemize}
+            \item \textbf{Base Case:} $2 \in E$, and $2 \in S$.
+            \item \textbf{Inductive Hypothesis:} Let $m \in E$, suppose $m \in S$.
+            \item \textbf{Inductive Step:} We want to show that $m + 2 \in S$. We know that $m \in S$ by the induction hypothesis, and we know that $2 \in S$. So by the definition of $S$, we have that $m + 2 \in S$.
+        \end{itemize}
+        Therefore $S = E$. 
+    \end{proof}
+    \item Let $S$ be the set defined recursively by
+    \begin{itemize}
+        \item $5 \in S$
+        \item If $x,y \in S$, then $x + y \in S$.
+    \end{itemize}
+    Let $E$ denote the set of positive multiples of 5, so $E = \{5,10,15,20,\ldots\}$. We want to show $S = E$. We will show that $S \subseteq E$ and $E \subseteq S$.
+    \begin{proof}
+        We will show $S \subseteq E$ by induction.
+        \begin{itemize}
+            \item \textbf{Base Case:} $5 \in S$, and $5 \in E$.
+            \item \textbf{Inductive Hypothesis:} Let $x,y \in S$, suppose $x,y \in E$. So $x = 5l$ and $y = 5k$ for some $l,k \in \mathbb{Z}$. 
+            \item \textbf{Inductive Step:} We want to show that $x + y \in E$. We have 
+            \[x + y = 5l + 5k = 5(l+k)\]
+            So $x + y \in E$.
+        \end{itemize}
+        Now to show $E \subseteq S$, 
+        \begin{itemize}
+            \item \textbf{Base Case:} $5 \in E$, and $5 \in S$.
+            \item \textbf{Inductive Hypothesis:} Let $m \in E$, suppose $m \in S$.
+            \item \textbf{Inductive Step:} We want to show that $m + 5 \in S$, by the induction hypthosis $m \in S$, from the base case $5 \in S$. So by the definition of $S$, we have that $m + 5 \in S$.
+        \end{itemize}
+        Therefore $S = E$.
+    \end{proof}
+    \item Let $S$ be the set defined recursively by
+    \begin{itemize}
+        \item $1 \in S$
+        \item If $x \in S$, then $3 \cdot x \in S$.
+    \end{itemize}
+    Let $E$ denote the set of powers of 3, so $E = \{1,3,9,27,\ldots\}$. We want to show $S = E$. We will show that $S \subseteq E$ and $E \subseteq S$.
+    \begin{proof}
+        We'll show that $S \subseteq E$ by induction.
+        \begin{itemize}
+            \item \textbf{Base Case:} $1 \in S$, and $1 \in E$.
+            \item \textbf{Inductive Hypothesis:} Let $x \in S$, suppose $x \in E$. So $x = 3^l$ for some $l \in \mathbb{Z}$.
+            \item \textbf{Inductive Step:} We want to show that $3 \cdot x \in E$. We have
+            \[3x = 3(3^l) = 3^{l+1}\]
+            So $3x \in E$.
+        \end{itemize}
+        Now to show $E \subseteq S$,
+        \begin{itemize}
+            \item \textbf{Base Case:} $1 \in E$, and $1 \in S$.
+            \item \textbf{Inductive Hypothesis:} Let $m \in E$, suppose $m \in S$. $m = 3^l$ for some $l \in \mathbb{Z}$.
+            \item \textbf{Inductive Step:} From the induction hypothesis, we have that $3^l \in S$, we want to show that $3^{l+1} \in S$. So we have 
+            \[3^{l+1} = 3 \cdot 3^l\]
+            By the induction hypothesis, $3^l \in S$, so $3^{l+1} \in S$.
+        \end{itemize}
+    \end{proof}
+    \item Let $S$ be the set defined recursively by
+    \begin{itemize}
+        \item $1 \in S$
+        \item If $x \in S$, then $\left(\sqrt{x} + 1\right)^2 \in S$.
+    \end{itemize}
+    Let $E$ denote the set of perfect squares, so $E = \{1,4,9,16,\ldots\}$. We want to show $S = E$. We will show that $S \subseteq E$ and $E \subseteq S$.
+    \begin{proof}
+        We'll show that $S \subseteq E$ by induction.
+        \begin{itemize}
+            \item \textbf{Base Case:} $1 \in S$, and $1 \in E$.
+            \item \textbf{Inductive Hypothesis:} Let $x \in S$, suppose $x \in E$. So $x = l^2$ for some $l \in \mathbb{Z}$.
+            \item \textbf{Inductive Step:} We want to show that $(\sqrt{x} + 1)^2 \in E$. We have
+            \[\sqrt{x} = \sqrt{l^2} = l \]
+            then 
+            \[\left(\sqrt{x} + 1\right)^2 = \left(l +1\right)^2 \]
+            $l +1$ is an integer, so by the induction hypothesis $(l+1)^2 \in E$. So $(\sqrt{x} + 1)^2 \in E$. Thus $S \subseteq E$.
+        \end{itemize}
+        Now to show $E \subseteq S$,
+        \begin{itemize}
+            \item \textbf{Base Case:} $1 \in E$, and $1 \in S$.
+            \item \textbf{Inductive Hypothesis: } Let $m^2 \in E$, suppose $m^2 \in S$.
+            \item \textbf{Inductive Step:} We want to show that $(m+1)^2 \in S$. From the induction hypthesis, we have that $m^2 \in S$, therefore by the definition of $S$, 
+            \[(\sqrt{m^2}+1)^2 = (m+1)^2 \in S\] 
+            Thus $E \subseteq S$. 
+        \end{itemize}
+    \end{proof}
+\end{enumerate}
+
+
+\section{Question 4}
+In class, we discussed a recursive definition of complete $k$-ary tree with height h and
+rooted at $r$. Write a recursive definition of a $k$-ary tree $T$ with height h and rooted at
+$r$. What do we get for the definition/formula of the size of $T$?\\[2ex]
+\textbf{Answer:} As seen in class, 
+\[n(h) = \frac{k^{h+1} - 1}{k-1}\]
+\section{Question 5}
+Let $n(h)$ denote the size of a complete $k$-ary tree with height $h$ and rooted at $r$. Find
+a function $f(n(h))$ such that $h = \Theta(f(n(h)))$.
+\textbf{Answer:} We have 
+\begin{align*}
+    n(h) &= \frac{k^{h+1} - 1}{k-1}\\
+    k^{h+1} -1 &= n(h)(k-1)\\
+    k^{h+1} &= n(h)(k-1) + 1\\
+    \log(k^{h+1}) &= \log(n(h)(k-1) + 1)\\
+    h+1 &= \frac{\log(n(h)(k-1) +1)}{\log(k)}\\
+    h &= \log_k(n(h)(k-1) + 1) - 1\\
+    h &= \Theta(\log_k(n(h)))
+\end{align*}
+%------------------------------- List 9 -------------------------------------%
 \chapter{Graphs}
 \section{Question 1}
 \begin{center}
