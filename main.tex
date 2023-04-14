@@ -3,6 +3,11 @@
 
 \usepackage{lecture_notes_styles}
 \usepackage{stylesheet}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+
+\renewcommand{\chaptername}{Lecture}
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{definition}{Definition}[section]
@@ -1026,10 +1031,201 @@ If $x = \frac{k}{k+1}$, then we have
 %---------------- Lecture 16 ----------------%
 
 \chapter{K-Ary Trees}
-\textbf{Example: Ternary Trees}
+The size of a $K$-ary tree $T$ (number of nodes) denoted by $n(T)$ is 
+\[n(T) = \begin{cases}
+    1 & \text{if $T$ is a single node}\\
+    1 + \sum\limits_{i=1}^k n(T_i) & \text{if $T$ is a complete $k$-ary tree with height $h$ and root $r$}
+\end{cases}\]
+$T_i$ is a subtree of $T$, since the tree is complete, we have 
+\begin{align*}
+    1 + \sum_{i=1}^k n(T_i) &= 1 + k \cdot n(T_1)\\  
+    &= 1 + k \cdot n(T_1)
+\end{align*}
+If we write $n(T)$ in terms of the height of $T$, we get 
+\[n(h) = \begin{cases}
+    1 & \text{if $h = 0$}\\
+    1 + k \cdot n(h-1) & \text{otherwise}
+\end{cases}\]
+So 
+\begin{align*}
+    n(0) &= 1\\
+    n(1) &= 1 + k \cdot n(0) &= 1 + k\\
+    n(2) &= 1 + k \cdot n(1) &= 1 + k + k^2\\
+    n(3) &= 1 + k \cdot n(2) &= 1 + k + k^2 + k^3\\
+    &\vdots
+    n(h) &= 1 + k + k^2 + k^3 + \ldots + k^h
+\end{align*}
+This can be proven by induction, then we get 
+\begin{align*}
+    k\cdot n(h) &= k + k^2 + k^3 + \ldots + k^{h+1}\\
+    k\cdot n(h) - n(h) &= k^{h+1} - 1\\
+    (k-1)n(h) = k^{h+1} - 1\\
+    n(h) &= \frac{k^{h+1} - 1}{k-1}
+\end{align*}
+\section{Recursive Algorithms}
+We usually refer to recursive algorithms when designing algorithm with the so-called Divide-and-Conquer approach. TO solve a problem of size $n$, the approach is to 
+\begin{itemize}
+    \item \textbf{Divide:} Dive the problem into smaller problems of size $< n$
+    \item \textbf{Conquer:} Solve the smaller problems recursively
+    \item \textbf{Combine/Merge:} Combine the solutions to each of the smaller problems to obtain a solution to the original problem
+\end{itemize}
+\noindent
+\textbf{Example:} Count the number of positive numbers in an array.
+\begin{algorithm}
+    \caption{Count the number of positive numbers in an array}
+    \begin{algorithmic}
+        \Procedure{$NB(A[1, \ldots n]$)}{}
+        \If $n = 1$
+        \If{$A[1] > 0$}
+        \Return 1
+        \Else
+            \Return 0
+        \EndIf
+        \Else      
+        \State $m \gets \lfloor \frac{n}{2} \rfloor$
+        \State $a_1 \gets NB(A[1, \ldots m])$
+        \State $a_2 \gets NB(A[m+1, \ldots n])$
+        \State $a \gets a_1 + a_2$
+        \State \Return $a$
+        \EndIf
+        \EndProcedure
+    \end{algorithmic}
+    \hrule
+\end{algorithm}
+\begin{itemize}
+    \item We split the problem into 2 smaller problems each of size $n/2$.
+    \item We make 2 recursive calls to call the same function on the 2 smaller problems.
+    \item Then we combine the outputs from the two recursive calls
+\end{itemize}
+Let $T(n)$ be the number of steps executed by $NB(A[1,\ldots,n])$. 
+\[T(1) = 3 \ \ (n = 3)\]
+\[T(n) = 2 \cdot T\left(\frac{n}{2}\right) + 4 \ \ (n>1)\]
+We can prove that $T(n) = O(n)$ later in this chapter. Lets prove this algorithm is correct by induction. 
+\begin{itemize}
+    \item \textbf{Base Case:} $n = 1$. If $A$ contains only one element, then $NB$ returns 1 if $A[1] > 0$, and returns 0 otherwise. So it is correct for $n = 1$.
+    \item \textbf{Induction Hypothesis:} Let $k \geq 1$ be an integer. Assume that $NB$ returns the number of strictly positive numbers in $A[1,\ldots,l]$ for all arrays $A[1, \ldots, l]$ with $ 1\leq l \leq k$.
+    \item \textbf{Induction Step:} Consider an array $A[1,\ldots,(k+1)]$ of numbers. $NB$ does
+    \[m = \lfloor \frac{k+1}{2} \rfloor \leq k\]
+    Then it does 
+    \[a_1 = NB(A[1, \ldots m])\]
+    \[a_2 = NB(A[m+1, \ldots k+1])\]
+    By the induction hypothesis, $a_1$ is the number of positive numbers in $A[1, \ldots m]$, and $a_2$ is the number of positive numbers in $A[m+1, \ldots k+1]$. So $a = a_1 + a_2$ is the number of positive numbers in $A[1, \ldots k+1]$.
+\end{itemize}
+\noindent
+\textbf{Example:} 
+\begin{algorithm}
+    \caption{Sort an array of $n$ numbers.}
+    \begin{algorithmic}
+        \Procedure{MergeSort($A[1,\ldots,n]$)}{}
+        \If {$n = 1$}
+            \Return $A[1, \ldots n]$
+        \Else
+            \State $m \gets \lfloor \frac{n}{2} \rfloor$
+            \State $L \gets \text{MergeSort}(A[1, \ldots m])$
+            \State $R \gets \text{MergeSort}(A[m+1, \ldots n])$
+            \State Merge L and R into one array $B[1, \ldots n]$
+            \Return $B$
+        \EndIf
+        \EndProcedure
+    \end{algorithmic}
+    \hrule
+\end{algorithm}
+To Merge the sublists, we compare the left most numbers in both arrays, take out the smallest one, and write it as the next number in $B$. We create 2 smaller problems of size $\frac{n}{2}$, and we make 2 recursive calls.
 
 %----------------- Lecture 17 ---------------%
-\chapter{}
+\chapter{Recursive Algorithms}
+Continuing the Merge Sort example, let $T(n)$ be the number of steps taken by MergeSort($A[1,\ldots,n]$). 
+\[T(1) = 2\]
+\[T(n) = 2 \cdot T\left(\frac{n}{2}\right) + n + 3 \ \ (n \geq 2)\]
+We can show that $T(n) = O(n \log n)$. (Later on)\\[3ex]
+\noindent
+\textbf{Example:}
+\begin{algorithm}
+    \caption{Binary Search}
+    \begin{algorithmic}
+        \Procedure{BIN($A[1,\ldots,n]$), $i$, $j$, $x$}{}
+        \If {$i = j$}
+            \If {$A[i] = x$}
+                \Return $i$
+            \Else
+                \Return nil
+            \EndIf
+        \Else
+            \State $m \gets \lfloor \frac{i+j-1}{2} \rfloor$
+            \If {$x \leq A[m]$}
+                \State index $\gets \text{BIN}(A[1,\ldots,n], i, m, x)$
+            \Else
+                \State index $\gets \text{BIN}(A[1,\ldots,n], m+1, j, x)$
+            \EndIf
+        \Return index
+        \EndIf
+        \EndProcedure
+    \end{algorithmic}
+    \hrule
+\end{algorithm}
+At the beginning, we call BIN($A[1,\ldots,n]$), $1$, $n$, $x$. We create 2 smaller problems of size $\frac{n}{2}$, and we make 1 recursive call with \emph{no merge step}. Let $T(n)$ be the number of steps taken my the algorithm,
+\[T(1) = 3\]
+\[T(n) = T\left(\frac{n}{2}\right) + 4 \ (n \geq 2)\]
+We can show that $T(n) = O(\log n)$. (Later on)\\[3ex]
+\section{Solving Recurrences}
+How do we solve these recurrences? 
+\begin{align*}
+    T(n) &= 2T \left(\frac{n}{2}\right) + 4\\
+    T(n) &= 2T \left(\frac{n}{4}\right) + (n + 3)\\
+    T(n) &= T \left(\frac{n}{4}\right) + 4\\
+\end{align*}
+By unfolding, \\[3ex]
+\noindent
+\textbf{Example:}
+\[
+    T(n) = 
+\begin{cases}
+    3 & n=1\\
+    2T\left(\frac{n}{2}\right) + 4 & n \geq 2
+\end{cases}    
+\]
+
+
+Assume $n=2^k$ for some $k \in \mathbb{N}$. 
+\begin{align*}
+    T(n) &= 2T\left(\frac{n}{2}\right) + 4\\
+    &= 2 \left(2 \cdot T\left(\frac{n/2}{2}\right) + 4 \right) + 4\\
+    &= 2^2 T\left(\frac{n}{2^2}\right) + 2\cdot 4 + 4\\
+    &= 2^2 \left(2 \cdot T\left(\frac{n/2^2}{2}\right) + 4 \right) + 2\cdot 4 + 4\\
+    &= 2^3 T\left(\frac{n}{2^3}\right) + 2^2\cdot 4 + 2^1\cdot4 + 2^0\cdot4\\
+    &\vdots\\
+    &= 2^k T\left(\frac{n}{2^k}\right) + 2^{k-1}\cdot 4 + 2^{k-2} \cdot 4 + \ldots + 2^1\cdot 4 + 2^0\cdot 4\\
+    &= 2^k T\left(\frac{n}{2^k}\right) +\sum_{i=0}^{k-1}2^i \cdot 4\\
+    &= n \cdot T(1) + \sum_{i=0}^{k-1}2^i \cdot 4\tag{$n = 2k$}\\
+    &= n \cdot 3 + (2^k - 1)\cdot 4\\
+    &= n\cdot 3 + (n-1)\cdot 4\\
+    &= 7n - 4\\
+    &= O(n)
+\end{align*}
+\noindent
+\textbf{Example:}
+\[
+    T(n) = 
+\begin{cases}
+    2 & n=1\\
+    2T\left(\frac{n}{2}\right) + (n+3) & n \geq 2
+\end{cases}
+\]
+By unfolding. Assume that $n = 2^k$. 
+\begin{align*}
+    T(n) &= 2T\left(\frac{n}{2}\right) + (n+3)\\
+    &= 2 \left(2 \cdot T\left(\frac{n/2}{2}\right) + \left(\frac{n}{2} + 3\right)\right) + (n+3)\\
+    &= 2^2 + \frac{n}{2^2} + 2n + 2\cdot 3 + 3\\
+    &= 2^2 \cdot \left(2\cdot T\left(\frac{n/2}{2}\right) + \left(\frac{n}{2^2} + 3\right)\right) + 2n + 2\cdot 3 + 3\\
+    &= 2^3 \cdot T\left(\frac{n}{2^3}\right) + 3n + 2^2\cdot 3 + 2^1\cdot 3 + 2^0\cdot 3\\
+    &\vdots\\
+    &= 2^k T\left(\frac{n}{2^k}\right) + kn + \sum_{i=0}^{k-1} 2^i \cdot 3\\
+    &= n + T(1) + \log_2(n)\cdot n + \sum_{i=0}^{k-1} 2^i \cdot 3\tag{$n = 2^k$}\\
+    &= 2\cdot n + n\log_2(n) + (2^k - 1)\cdot 3\\
+    &= n\log_2(n) + 5n -3 \\
+    &= O(n\log n)
+\end{align*}
+
 
 %----------------- Lecture 18 ---------------%
 \chapter{Graphs}
